@@ -1,4 +1,4 @@
--- Initialize with 5 sample employees
+-- Initialize with 6 sample employees
 INSERT INTO employee (first_name, last_name, email, department, salary) VALUES
 ('mahmoud', 'ahmed', 'mahmoud.ahmed@gmail.com', 'Engineering', 55000.00),
 ('mohamed', 'kamal', 'mohamed.kamal@gmail.com', 'Marketing', 45000.00),
