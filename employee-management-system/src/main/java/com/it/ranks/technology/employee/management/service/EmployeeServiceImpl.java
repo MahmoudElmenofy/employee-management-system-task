@@ -30,7 +30,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<Employee> getEmployeeById(Long id) {
+    public Optional<Employee>  getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
+
         return employeeRepository.findById(id);
     }
 
@@ -40,7 +43,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
 
         // Check if email is being changed and if the new email already exists for another employee
-        if (!employee.getEmail().equals(employeeDetails.getEmail()) && employeeRepository.existsByEmail(employeeDetails.getEmail())) {
+        if (!employee.getEmail().equals(employeeDetails.getEmail()) &&
+                employeeRepository.existsByEmail(employeeDetails.getEmail())) {
             throw new DataIntegrityViolationException("Email already exists: " + employeeDetails.getEmail());
         }
 

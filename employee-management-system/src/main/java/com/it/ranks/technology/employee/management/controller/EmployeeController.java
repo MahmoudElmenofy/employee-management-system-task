@@ -1,7 +1,6 @@
 package com.it.ranks.technology.employee.management.controller;
 
 import com.it.ranks.technology.employee.management.entity.Employee;
-import com.it.ranks.technology.employee.management.exception.ResourceNotFoundException;
 import com.it.ranks.technology.employee.management.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-
     @Autowired
     private EmployeeService employeeService;
 
@@ -36,10 +36,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-        Employee employee = employeeService.getEmployeeById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee with id " + id + " not found"));
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+    public ResponseEntity<Optional<Employee>> getEmployeeById(@PathVariable Long id) {
+        Optional<Employee> employee = employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(employee);
     }
 
     @PutMapping("/{id}")
@@ -60,10 +59,6 @@ public class EmployeeController {
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }
-
-
-
-
 
 
 
