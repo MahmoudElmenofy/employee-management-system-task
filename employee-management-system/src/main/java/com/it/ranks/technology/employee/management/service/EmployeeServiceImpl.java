@@ -66,6 +66,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getEmployeesByDepartment(String department) {
-        return employeeRepository.findByDepartment(department);
+        List<Employee> employees = employeeRepository.findByDepartment(department);
+        if (employees.isEmpty()) {
+            throw new ResourceNotFoundException("Department '" + department + "' does not exist or has any employees");
+        }
+        return employees;
     }
+
 }
