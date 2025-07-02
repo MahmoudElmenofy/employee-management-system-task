@@ -11,10 +11,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+
     @Autowired
-    private EmployeeRepository employeeRepository;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
     @Override
     public Employee createEmployee(Employee employee) {
@@ -30,10 +36,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<Employee>  getEmployeeById(Long id) {
-        Employee employee = employeeRepository.findById(id)
+    public Optional<Employee> getEmployeeById(Long id) {
+        employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
-
         return employeeRepository.findById(id);
     }
 
@@ -42,7 +47,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
 
-        // Check if email is being changed and if the new email already exists for another employee
         if (!employee.getEmail().equals(employeeDetails.getEmail()) &&
                 employeeRepository.existsByEmail(employeeDetails.getEmail())) {
             throw new DataIntegrityViolationException("Email already exists: " + employeeDetails.getEmail());
@@ -72,5 +76,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return employees;
     }
-
 }
